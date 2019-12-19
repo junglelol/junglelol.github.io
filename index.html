@@ -1,0 +1,569 @@
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <title>Jungle.LOL</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-118283086-5"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-118283086-5');
+	</script>
+    <script>
+        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        // Windows Phone
+        if (/windows phone/i.test(userAgent)) {
+            window.location.replace("/mobile");
+        }
+
+        // Android
+        if (/android/i.test(userAgent)) {
+            <!-- window.location.replace("https://play.google.com/store/apps/details?id=lol.justbuild"); -->
+			window.location.replace("/mobile");
+        }
+
+        // iOS
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+            <!-- window.location.replace("https://itunes.apple.com/us/app/justbuild-lol/id1403419695"); -->
+			window.location.replace("/mobile");
+        }
+    </script>
+    <link rel='shortcut icon' type="image/png" href="favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="Play Jungle.LOL - 2d real-time multiplayer build battle shooter, free online battle royale game">
+    <meta name="keywords" content="jungle,just build,lol,simulator,building,practice,train,free,online,battle royale">
+	<link rel="stylesheet" href="style.css?v=3">
+	<style>
+	.ad-rectangle-top {
+		top: 50%;
+		right: 0;
+		width: 310px;
+		height: 270px;
+		margin: -261px 0;
+		border-style: solid;
+		border-width: 10px 0px 10px 10px;
+		border-color: rgba(0,0,0,0.01);
+	}
+
+	.ad-rectangle-bottom {
+		top: 50%;
+		right: 0;
+		width: 310px;
+		height: 260px;
+		margin: 9px 0;
+		border-style: solid;
+		border-width: 0px 0px 0px 10px;
+		border-color: rgba(0,0,0,0.01);
+	}
+	
+	.ad-rectangle {
+		top: 50%;
+		right: 0;
+		width: 310px;
+		height: 270px;
+		margin: -125px 0 0;
+		border-style: solid;
+		border-width: 10px 0px 10px 10px;
+		/* border-color: rgba(0, 0, 0, 0.01); */
+		border-color: transparent;
+		background-color: transparent ;
+	}
+
+	.ad-leaderboard {
+		bottom: 0;
+		left: 50%;
+		width: 748px;
+		height: 100px;
+		margin: 0 0 0 -364px;
+		border-style: solid;
+		border-width: 10px 10px 0px 10px;
+		/*  border-color: rgba(0, 0, 0, 0.01); */
+		border-color: transparent;
+		background-color: transparent ;
+	}
+	
+	#loader{
+		background-image: url("splash.jpg");
+		background-size: auto 100%;
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	.spinner{
+		position: absolute;
+		bottom: 2vw;
+	}
+	.progress{
+		position: absolute;
+		bottom: 2vw;
+		background-color: #272727;
+		margin: 0;
+		border: 3px solid black;
+		width: 50vw;
+	}
+	.progress .full{
+		margin: 0;
+		background: #ffffff;
+		height: 2em;
+		transform-origin: top left;
+	}
+	
+	#adWindow{
+		border: 10px solid #4382f5!important;
+		height: 500px!important;
+	}
+	
+	a[onclick*="showConsentToolSettings"]{
+		right: 0px;
+		left: auto !important;
+	}
+	</style>
+	<!-- AdinPlay Ads -->
+	<script>
+	var aiptag = aiptag || {};
+	aiptag.cmd = aiptag.cmd || [];
+	aiptag.cmd.display = aiptag.cmd.display || [];
+	aiptag.cmd.player = aiptag.cmd.player || [];
+	
+	aiptag.gdprShowConsentTool = true;
+	aiptag.gdprShowConsentToolButton = true;
+	aiptag.gdprConsentToolPosition = "bottom";
+	
+	</script>
+	<script async src="https://api.adinplay.com/libs/aiptag/pub/JBL/jungle.lol/tag.min.js"></script>
+</head>
+
+<body>
+	<div id="generalModal" class="modal">
+		<div id="generalModalContent" class="modalContent"></div>
+	</div>
+
+    <div id="gameContainer"></div>
+    <div id="loader">
+        <!-- <img class="logo" src="logo.png"> -->
+        <div class="spinner"></div>
+        <div class="progress">
+            <div class="full"></div>
+        </div>
+    </div>
+
+    <div class="ad ad-rectangle-top" id="adRectangleTop">
+    </div>
+	
+	<div class="ad ad-rectangle-bottom" id="adRectangleBottom">
+    </div>
+
+	<script>
+	function createAdInPlayAd(adId, container){
+			var newDiv = document.createElement("div");
+			newDiv.id = adId;
+			newDiv = container.appendChild(newDiv);
+			var newScript = document.createElement("script");
+			newScript.type = 'text/javascript';
+			var inlineScript = document.createTextNode("aiptag.cmd.display.push(function() { aipDisplayTag.display('" + adId + "'); });");
+			newScript.appendChild(inlineScript);
+			newDiv.appendChild(newScript);
+		}
+		
+		function createAdsenseAd(adId, container, adStyle){
+			var asyncScript = document.createElement("script");
+			asyncScript.async = true;
+			asyncScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
+			var insClass =  document.createElement("ins");
+			insClass.style = adStyle;
+			insClass.setAttribute("class", "adsbygoogle");
+			insClass.setAttribute("data-ad-client", "ca-pub-9619368648213417");
+			insClass.setAttribute("data-ad-slot", adId);
+			var newScript = document.createElement("script");
+			var inlineScript = document.createTextNode("(adsbygoogle = window.adsbygoogle || []).push({});");
+			newScript.appendChild(inlineScript);
+			
+			container.appendChild(asyncScript);
+			container.appendChild(insClass);
+			container.appendChild(newScript);
+		}
+		
+		function createAdManagerAd(adId, container, adStyle, slotId, refresh, adSizes){
+			// head
+			var asyncScript = document.createElement("script");
+			asyncScript.async = true;
+			asyncScript.src = "https://securepubads.g.doubleclick.net/tag/js/gpt.js";
+			var newScript2 = document.createElement("script");
+			var inlineScript2 = document.createTextNode("window.googletag = window.googletag || {cmd: []}; googletag.cmd.push(function() { googletag.defineSlot('" + slotId + "', " + adSizes + ", '" + adId + "').setTargeting('refresh', ['" + refresh + "']).addService(googletag.pubads()); googletag.pubads().enableSingleRequest(); googletag.enableServices(); });");
+			newScript2.appendChild(inlineScript2);
+			
+			var head = document.getElementsByTagName('head')[0];
+			head.appendChild(asyncScript);
+			head.appendChild(newScript2);
+			
+			// body
+			var newDiv = document.createElement("div");
+			newDiv.id = adId;
+			newDiv.style = adStyle;
+			newDiv = container.appendChild(newDiv);
+			var newScript = document.createElement("script");
+			var inlineScript = document.createTextNode("googletag.cmd.push(function() { googletag.display('" + adId + "'); });");
+			newScript.appendChild(inlineScript);
+			newDiv.appendChild(newScript);
+			
+			container.appendChild(newDiv);
+		}
+		
+		var topRectangleAd = document.getElementById("adRectangleTop");
+		var bottomRectangleAd = document.getElementById("adRectangleBottom");
+		var topLeaderboardAd = document.getElementById("adLeaderboardTop");
+		var useRefresh = false;
+		var useAdInPlay = false;
+		var useAdManager = false;
+		var number = Math.random();
+		console.log(number);
+		
+		
+		//if(number <= 1){
+			console.log("Showing AdInPlay with refresh");
+			useRefresh = true;
+			useAdInPlay = true;
+			createAdInPlayAd('jungle-lol_300x250', topRectangleAd);
+			createAdInPlayAd('jungle-lol_300x250_2', bottomRectangleAd);
+		//}
+		/*else{
+			console.log("Showing AdManager with refresh");
+			useRefresh = true;
+			useAdManager = true;
+			createAdManagerAd('div-gpt-ad-1573555628917-0', topRectangleAd, "width:300px;height:250px", "/21834398356/justbuildlolXrectangleTop", "true", "[300, 250]");
+			createAdManagerAd('div-gpt-ad-1573556407345-0', bottomRectangleAd, "width:300px;height:250px", "/21834398356/justbuildlolXrectangleBottom", "true", "[300, 250]");
+		}*/
+		/*else{
+			console.log("Showing adsense");
+			createAdsenseAd('1098575085', topRectangleAd, "display:inline-block;width:300px;height:250px");
+			createAdsenseAd('6350901768', bottomRectangleAd, "display:inline-block;width:300px;height:250px");
+		}*/
+	</script>
+
+    <script src="https://justbuild.nyc3.cdn.digitaloceanspaces.com/jungle1.17/Build/UnityLoader.js"></script>
+    <!-- <script src="Build/UnityLoader.js"></script> -->
+    <script>
+        var gameInstance = UnityLoader.instantiate("gameContainer", "https://justbuild.nyc3.cdn.digitaloceanspaces.com/jungle1.17/Build/WebGL.json", {onProgress: UnityProgress});
+        // var gameInstance = UnityLoader.instantiate("gameContainer", "Build/WebGL.json", {onProgress: UnityProgress});
+
+        function UnityProgress(gameInstance, progress) {
+            if (!gameInstance.Module) {
+                return;
+            }
+            const loader = document.querySelector("#loader");
+            if (!gameInstance.progress) {
+                const progress = document.querySelector("#loader .progress");
+                progress.style.display = "block";
+                gameInstance.progress = progress.querySelector(".full");
+                loader.querySelector(".spinner").style.display = "none";
+            }
+            gameInstance.progress.style.transform = `scaleX(${progress})`;
+            if (progress === 1 && !gameInstance.removeTimeout) {
+                loader.style.display = "none";
+            }
+        }
+
+        function showAdSense() {
+            document.getElementById("adRectangleTop").style.display = "block";
+			document.getElementById("adRectangleBottom").style.display = "block";
+			
+			refresh();
+        }
+
+        function hideAdSense() {
+            document.getElementById("adRectangleTop").style.display = "none";
+			document.getElementById("adRectangleBottom").style.display = "none";
+        }
+		
+		function requestNewAd(){
+			if(gameInstance)
+				gameInstance.SendMessage('Managers', 'WebCallback');
+		}
+		
+		/* View in fullscreen */
+		var elem = document.documentElement;
+		function openFullscreen() {
+		  if (elem.requestFullscreen) {
+			elem.requestFullscreen();
+		  } else if (elem.mozRequestFullScreen) { /* Firefox */
+			elem.mozRequestFullScreen();
+		  } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+			elem.webkitRequestFullscreen();
+		  } else if (elem.msRequestFullscreen) { /* IE/Edge */
+			elem.msRequestFullscreen();
+		  }
+		}
+		
+		/* Close fullscreen */
+		function closeFullscreen() {
+		  if (document.exitFullscreen) {
+			document.exitFullscreen();
+		  } else if (document.mozCancelFullScreen) { /* Firefox */
+			document.mozCancelFullScreen();
+		  } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+			document.webkitExitFullscreen();
+		  } else if (document.msExitFullscreen) { /* IE/Edge */
+			document.msExitFullscreen();
+		  }
+		}
+		
+		function updateFullscreen(){
+			var isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
+			(document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
+			(document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
+			(document.msFullscreenElement && document.msFullscreenElement !== null);
+			if(!isInFullScreen)
+				openFullscreen();
+			else
+				closeFullscreen();
+		}
+		
+		document.addEventListener('visibilitychange', function () {
+			if (document.visibilityState == "hidden") {
+				gameInstance.SendMessage("Managers", "GameHidden");;
+			}
+		});
+			
+		var needRefresh = false;
+		var refreshTime = new Date();
+		
+		function refresh(){
+		
+			if(!useRefresh || !needRefresh){
+				needRefresh = true;
+				return;
+			}
+			
+		
+			var timeSinceRefresh = new Date() - refreshTime; //in ms
+			if(timeSinceRefresh < 30*1000){
+				console.log("don't refresh, time since last refresh " + timeSinceRefresh / 1000 + " seconds");
+				return;
+			}
+		
+			if(useAdInPlay){
+				aiptag.cmd.display.push(function() {
+					aipDisplayTag.display('jungle-lol_300x250');
+					aipDisplayTag.display('jungle-lol_300x250_2');
+				});
+			}
+			else if(useAdManager){
+				if(googletag && googletag.pubads) // null when adblock is enabled
+					googletag.pubads().refresh();
+			}
+			
+			refreshTime = new Date();
+			console.log("refresh ads");
+		}
+			
+		window.onfocus = function() {
+			refresh();
+		};
+    </script>
+	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
+
+	<!-- Add Firebase products that you want to use -->
+	<script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-firestore.js"></script>
+	
+	<script>
+  function initializeFireBase(){
+	// Your web app's Firebase configuration
+	var firebaseConfig = {
+	apiKey: "AIzaSyBPrAfspM9RFxuNuDtSyaOZ5YRjDBNiq5I",
+	authDomain: "justbuild-cdb86.firebaseapp.com",
+	databaseURL: "https://justbuild-cdb86.firebaseio.com",
+	projectId: "justbuild-cdb86",
+	storageBucket: "justbuild-cdb86.appspot.com",
+	messagingSenderId: "93158914000",
+	appId: "1:93158914000:web:e73a8b453338ab7c"
+	};
+	// Initialize Firebase
+	firebase.initializeApp(firebaseConfig);
+}</script>
+	<script>var tempErrorCreds;
+var tempProviderName;
+
+
+function firebaseLogin(providerName) {
+	var user = firebase.auth().currentUser;
+	if(!user){
+		var provider = getProvider(providerName);
+		firebase.auth().useDeviceLanguage();
+		
+		firebase.auth().signInWithPopup(provider).catch(function(error) {
+			// Handle Errors here.
+			var errorCode = error.code;
+			var errorMessage = error.message;
+			// The email of the user's account used.
+			var email = error.email;
+			// The firebase.auth.AuthCredential type that was used.
+			tempErrorCreds = error.credential;
+			console.log(error);
+			
+			if (errorCode === 'auth/account-exists-with-different-credential') {
+				// User's email already exists.
+				// Get sign-in methods for this email.
+				firebase.auth().fetchSignInMethodsForEmail(email).then(function(methods) {
+				  // the first method in the list will be the "recommended" method to use.
+				  if(methods.length == 0)
+					  return;
+				  // Sign in to provider.
+				  tempProviderName = methods[0].trim();
+				  setModalContent("generalModalContent",
+				  "<div id =\"continueWindow\"><span class=\"close\" id=\"closeButton\" onclick=\"hideModal('generalModal')\">&times;</span><p>Please press the button to login: </p><button onclick=\"continueLogin()\">Continue Login</button></div>");
+				  showModal("generalModal");
+				});
+			}
+		});
+	}
+	else
+	{
+		console.log("Already Logged in");
+	}    
+}
+
+function firebaseLogout() {
+	firebase.auth().signOut().catch(function(error) {
+	  console.log(error);
+	});   
+}
+
+function getCurrentUserDisplayName() {
+	var user = firebase.auth().currentUser;
+	var displayName = "";
+	if(user)
+	{
+		displayName = user.displayName;
+	}
+	return displayName;
+}
+
+function getProvider(providerName){
+	if(providerName && providerName.indexOf("facebook") != -1)
+		return new firebase.auth.FacebookAuthProvider()
+	else
+		return new firebase.auth.GoogleAuthProvider()
+}
+
+function setModalContent(modalContentId, contentString){
+	content = document.getElementById(modalContentId);
+	if(content){
+		content.innerHTML = contentString;
+	}
+		
+}
+
+function continueLogin(){
+	hideModal("generalModal");
+	var provider = getProvider(tempProviderName);
+	firebase.auth().signInWithPopup(provider).then(
+		function(result) {
+			if(!tempErrorCreds){
+				return;
+			}
+			// As we have access to the pending credential, we can directly call the link method.
+			result.user.linkAndRetrieveDataWithCredential(tempErrorCreds).then(function(usercred) {
+			  //goToApp();
+			});
+		});
+	
+}
+
+function showModal(modalId){
+	modal = document.getElementById(modalId);
+	if(modal)
+		modal.style.display = "block";
+}
+
+function hideModal(modalId){
+	modal = document.getElementById(modalId);
+	if(modal)
+		modal.style.display = "none";
+}</script>
+	<script>
+  var db;
+
+function initializeFirestore()
+{
+	db = firebase.firestore();
+}
+
+//TODO: add subcollections support 
+
+function addDocument(collectionName, data, isJson){
+	if(!db || !collectionName)
+		return;
+	
+	if(isJson){
+		try {
+			data = JSON.parse(data);
+		} catch(error){ 
+			console.log("Couldnt insert data to db, invalid json");
+			return;
+		}
+	}
+		
+	return db.collection(collectionName).add(data);
+}
+
+function setDocument(collectionName, documentName, data, isJson, isMerge){
+	if(!db || !collectionName || !documentName)
+		return;
+	
+	if(isJson){
+		try {
+			data = JSON.parse(data);
+		} catch(error){ 
+			console.log("Couldnt insert data to db, invalid json");
+			return;
+		}
+	}
+		
+	return db.collection(collectionName).doc(documentName).set(data, { merge: isMerge });
+}
+
+function updateDocument(collectionName, documentName, data, isJson){
+	// TODO: add support for arrays
+	if(!db || !collectionName || !documentName)
+		return;
+	
+	if(isJson){
+		try {
+			data = JSON.parse(data);
+		} catch(error){ 
+			console.log("Couldnt insert data to db, invalid json");
+			return;
+		}
+	}
+		
+	return db.collection(collectionName).doc(documentName).update(data);
+}
+
+function deleteDocument(collectionName, documentName){
+	if(!db || !collectionName || !documentName)
+		return;
+		
+	return db.collection(collectionName).doc(documentName).delete();
+}
+
+function getDocument(collectionName, documentName){
+	if(!db || !collectionName || !documentName)
+		return;
+		
+	return db.collection(collectionName).doc(documentName).get();
+}
+  </script>
+	
+	<script>
+		initializeFireBase();
+		initializeFirestore();
+	</script>
+</body>
+
+</html>
